@@ -40,7 +40,7 @@ git clone --recurse-submodules <repo-url> cpt-neutrino-analysis
 cd cpt-neutrino-analysis
 
 # 2. install dependencies (see docs/INSTALL.md for details)
-#    - Python: numpy<2, scipy, h5py, pandas/pyarrow, matplotlib, nuSQuIDS, nuflux
+#    - Python: numpy<2, scipy, h5py, pandas/pyarrow, matplotlib, scikit-image, nuSQuIDS, nuflux
 #    - GLoBES (only for the DUNE accelerator study)
 
 # 3. configure your machine
@@ -95,34 +95,47 @@ The XML configs reference these files as `${DATA_DIR}/<path>`. Place them under
 | `Pynu/data/ORCAFull/ORCA_full_MC.parquet` | ORCA-Full MC | derived; collaboration-internal |
 | `Pynu/data/ORCAFullEvtMC/ORCA_full_evtmc.csv` | ORCA-Full event MC | derived; collaboration-internal |
 
-## Running the analysis
+## Reproducing the analysis
 
-> The fit-runner and plotting scripts are ported from the production pipeline and
-> finalized to the exact set of figures in the published paper. See **Status**.
+Each paper figure is produced in two steps: an **analysis runner** (`analysis/`)
+that regenerates the result file from MC/data + a framework (Pynu / GLoBES /
+nuSQuIDS), then a **plot script** (`plots/`) that draws the figure from that
+result. All scripts resolve frameworks, configs, and data through
+`analysis/lib/paths.py` (env vars) — no paths are hardcoded. Run them from the
+repo root with `env.sh` sourced; output figures default to `outputs/` (gitignored).
 
-**Atmospheric (Pynu) fit** — runners under `analysis/atmospheric/` resolve Pynu and
-the config through `analysis/lib/paths.py`, e.g.:
+Runners take CLI args (grid indices, exposures, output dirs) and degrade to the
+`SLURM_ARRAY_TASK_ID` env var when present, so the same script runs locally or as
+a cluster array job. Plotters take their input result file via `--input` /
+`--results-dir` (the heavy result grids are not shipped — regenerate them with the
+runner, or point at your own).
 
-```bash
-source env.sh
-python -m analysis.atmospheric.<runner> --config IC_Atm_CPT_datafit.xml [grid args...]
-```
+### Figure → script → number map
 
-**Accelerator (GLoBES) DUNE study** — runners under `analysis/globes/` load the
-8-rule CPT config (`configs/globes/dune_globes/DUNE_GLoBES_CPT.glb`).
+| Fig | Content | Plot script (`plots/`) | Analysis runner(s) (`analysis/`) | Headline number |
+|---|---|---|---|---|
+| 1 | DUNE ΔP 3-panel decomposition (CP/CPT/matter) | `plot_fig1_dune_dp_decomposition.py` | `probability/run_dune_degeneracy_panels.py` (nuSQuIDS) | truth δCP=−112°, Δ=1.0×10⁻³; imposter δCP=−84°; residual ≲1.4% |
+| 2 | CP/CPT/effective-CP vector schematic | — (TikZ in the manuscript, not code) | — | — |
+| 3 | T2K + NOvA degeneracy manifolds | `plot_fig3_nova_t2k_manifolds.py` | inline (Cervera analytic) | reconciling δCP≈109°, δΔm²₃₁≈1.48×10⁻³ |
+| 4 | DUNE CPT bias on δCP (heatmap + bands) | `plot_fig4_dune_cpt_bias.py` | `globes/run_dune_dcp_scan.py` → `globes/assemble_dune_method_d.py` | 8-rule GLoBES; basin switch δΔm²≈+0.76×10⁻³ |
+| 5 | Atmospheric 2D contours (data + sensitivity) | `plot_fig5_atm_contours.py` | `atmospheric/run_combined_cpt_datafit.py`, `run_combined_future_sensitivity.py` (+ assemblers) | data ORCA-6+IC-DC (433 kt-yr / 7.74 yr); proj ORCA-Full 5 yr + IC-Up-7 10 yr |
+| 6 | Oscillograds ∂P/∂Δm², ∂P/∂δCP | _pending (CHIC code, from P. Fernández-Menéndez)_ | — | NO/IO |
+| 7 | Time-evolution sensitivity vs year | `plot_fig7_time_evolution.py` | `atmospheric/run_cpt_time_evolution.py` | at δΔm²=0.05×10⁻³; IC-Up 2026, ORCA-Full 2031 |
+| S1 | NOvA CPT bias heatmap | `plot_figS1_nova_bias.py` | `globes/run_nova_dcp_scan.py` | NOvA 810 km, 25 kt, 3+3 yr; 4-rule |
+| S2 | DUNE basin-switch event spectra (6-panel) | `globes/diagnose_dune_basin_switch.py --phase 2 --paper` | (embedded GLoBES) | min1 δCP=+169°, min2 δCP=−34°, s²θ₂₃=0.630 |
+| S3 | IC-DC + IC-Up-7 event-count difference | `plot_figS3_event_difference.py` | `atmospheric/run_ic_event_difference.py`, `run_icup_event_difference.py` | Δm²₃₁=2.511×10⁻³, Δm̄²₃₁=2.0×10⁻³ |
+| S4 | 1D Δχ² profile of δΔm²₃₁ | `plot_figS4_1d_profiles.py` | (reads Fig 5 grids) | data 90%: [−0.44,+0.57]×10⁻³; proj: [−0.14,+0.14]×10⁻³ |
 
-## Producing the paper figures
-
-`plots/` regenerates each paper figure from a result file (which you produce with
-the runners above). A figure → script → quoted-number table is provided once the
-figure set is finalized against the paper. See **Status**.
+**Headline result:** current world-leading constraint δΔm²₃₁ ∈ [−0.44, +0.57]×10⁻³ eV²
+at 90% CL (ORCA-6 + IceCube DeepCore), reaching ≤ 10⁻⁴ eV² within a decade
+(ORCA-Full + IceCube Upgrade).
 
 ## Status
 
-This repository is being assembled. Phase 1 (configs, submodule, env-var
-infrastructure, install docs) is in place. Phase 2 — porting the exact fit-runner
-and plotting scripts for the figures that appear in the final paper, with the
-figure→script→number map — is in progress.
+Phases 1–2 in place: configs, Pynu submodule, env-var infrastructure, and the
+ported analysis + plotting scripts for 9 of the paper's figures. Outstanding:
+Fig 6 (CHIC oscillograds, awaited from a co-author) and the Fig 2 schematic
+(TikZ, lives in the manuscript, not the code).
 
 ## Citation
 

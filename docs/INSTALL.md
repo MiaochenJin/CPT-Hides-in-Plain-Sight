@@ -31,7 +31,7 @@ source .venv/bin/activate
 pip install --upgrade pip
 
 # core scientific stack (versions known to work together)
-pip install "numpy<2" scipy h5py pandas pyarrow matplotlib iminuit KDEpy
+pip install "numpy<2" scipy h5py pandas pyarrow matplotlib iminuit KDEpy scikit-image
 
 # oscillation + flux engines (native wheels)
 pip install nusquids nuflux        # provides `import nuSQuIDS`, `import nuflux`

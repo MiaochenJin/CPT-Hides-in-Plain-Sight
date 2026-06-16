@@ -1,0 +1,38 @@
+# --- machine-specific env ---
+env.sh
+
+# --- python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# --- MC / data files (acquired separately; see docs/INSTALL.md) ---
+*.h5
+*.hdf5
+*.parquet
+*.csv
+
+# --- analysis outputs / results (this is a scripts-only repo) ---
+results/
+output/
+outputs/
+*.npy
+*.npz
+
+# --- generated figures ---
+*.png
+*.pdf
+*.eps
+*.svg
+
+# --- os cruft ---
+.DS_Store
+
+# --- keep: configs/globes ancillary tables are tracked despite the data globs ---
+!configs/globes/**/*.dat
+!configs/globes/**/*.txt
+!configs/globes/**/*.inc
+!configs/globes/**/*.glb

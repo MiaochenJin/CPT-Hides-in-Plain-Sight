@@ -1,0 +1,4 @@
+[submodule "external/Pynu"]
+	path = external/Pynu
+	url = git@github.com:pabloferm/Pynu.git
+	branch = pheno-CPT

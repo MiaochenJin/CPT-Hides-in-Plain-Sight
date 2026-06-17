@@ -85,6 +85,10 @@ def main():
         parser.error("--row is required (or set $SLURM_ARRAY_TASK_ID)")
     if args.config is None:
         args.config = paths.pynu_config(CONFIG_NAME)
+    elif not os.path.exists(args.config):
+        # A bare config name (e.g. "Combined_ORCAFull_ICUp_CPT.xml") -> resolve
+        # from configs/pynu/ with ${DATA_DIR} expanded. An existing path is used as-is.
+        args.config = paths.pynu_config(args.config)
 
     os.makedirs(args.output_dir, exist_ok=True)
 

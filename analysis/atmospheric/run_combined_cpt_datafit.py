@@ -235,6 +235,10 @@ def main():
         parser.error("--row is required (or set $SLURM_ARRAY_TASK_ID)")
     if args.config is None:
         args.config = paths.pynu_config(CONFIG_NAME)
+    elif not os.path.exists(args.config):
+        # A bare config name -> resolve from configs/pynu/ with ${DATA_DIR}
+        # expanded. An existing path is used as-is.
+        args.config = paths.pynu_config(args.config)
     if args.hs_dir is None:
         args.hs_dir = default_hs_dir()
 

@@ -74,11 +74,17 @@ def load_grid(base_dir, chi2_name=None):
     if chi2_name:
         chi2 = np.load(os.path.join(base_dir, chi2_name))
     else:
-        try:
-            chi2 = np.load(os.path.join(base_dir, 'delta_chi2_grid.npy'))
-            return dm, delta, chi2 - np.nanmin(chi2)
-        except FileNotFoundError:
-            chi2 = np.load(os.path.join(base_dir, 'chi2_grid.npy'))
+        # Datafit grids ship chi2_profiled.npy (profiled over s23); sensitivity
+        # grids ship chi2_grid.npy; some ship a pre-subtracted delta_chi2_grid.npy.
+        for cand in ('delta_chi2_grid.npy', 'chi2_grid.npy', 'chi2_profiled.npy'):
+            p = os.path.join(base_dir, cand)
+            if os.path.exists(p):
+                chi2 = np.load(p)
+                break
+        else:
+            raise FileNotFoundError(
+                "no chi2 grid (delta_chi2_grid.npy / chi2_grid.npy / "
+                f"chi2_profiled.npy) found in {base_dir}")
     return dm, delta, chi2 - np.nanmin(chi2)
 
 

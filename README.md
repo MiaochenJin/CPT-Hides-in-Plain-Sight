@@ -137,6 +137,14 @@ ported analysis + plotting scripts for 9 of the paper's figures. Outstanding:
 Fig 6 (CHIC oscillograds, awaited from a co-author) and the Fig 2 schematic
 (TikZ, lives in the manuscript, not the code).
 
+**Validated** end-to-end on a real workstation (Pynu + nuSQuIDS environment): the
+env-var path layer + XML `${DATA_DIR}` resolution, the Pynu fit runners (a real
+combined ORCA-Full + IceCube-Upgrade fit converges, χ²≈180 at a grid point), the
+nuSQuIDS ΔP runner, the ICUp event-difference runner, and the Fig 1/3/5/S4
+plotters (Fig S4 reproduces the quoted 90% interval [−0.44,+0.57]×10⁻³ eV²). The
+GLoBES figures (4, S1, S2) require a GLoBES build and were not exercised on that
+machine.
+
 ## Citation
 
 _(paper reference to be added)_

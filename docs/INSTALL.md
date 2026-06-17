@@ -77,6 +77,18 @@ The Python GLoBES drivers in `analysis/globes/` call into `libglobes` via the
 config in `configs/globes/dune_globes/` — that directory is self-contained
 (flux, cross-section, efficiency, and smearing tables are all included).
 
+## 3b. CHIC (only for the Fig 6 oscillograds)
+
+`analysis/probability/run_oscillograds.py` computes the oscillation-probability
+derivative maps with **CHIC** (`import pychic_earth`), the Caley–Hamilton
+oscillation/derivative code of P. Fernández-Menéndez (refs [36, 37] in the paper).
+CHIC is **not on PyPI** — obtain it from the authors and install it into the same
+environment (`pip install <path-to-pychic_earth>` or add it to `PYTHONPATH`).
+
+Only the Fig 6 *runner* needs CHIC. The Fig 6 *plotter*
+(`plots/plot_fig6_oscillograds.py`) draws from the runner's npz and needs only
+numpy/matplotlib, so the figure can be re-styled without CHIC once the npz exists.
+
 ## 4. Configure your machine
 
 ```bash

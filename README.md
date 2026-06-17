@@ -119,7 +119,7 @@ runner, or point at your own).
 | 3 | T2K + NOvA degeneracy manifolds | `plot_fig3_nova_t2k_manifolds.py` | inline (Cervera analytic) | reconciling δCP≈109°, δΔm²₃₁≈1.48×10⁻³ |
 | 4 | DUNE CPT bias on δCP (heatmap + bands) | `plot_fig4_dune_cpt_bias.py` | `globes/run_dune_dcp_scan.py` → `globes/assemble_dune_method_d.py` | 8-rule GLoBES; basin switch δΔm²≈+0.76×10⁻³ |
 | 5 | Atmospheric 2D contours (data + sensitivity) | `plot_fig5_atm_contours.py` | `atmospheric/run_combined_cpt_datafit.py`, `run_combined_future_sensitivity.py` (+ assemblers) | data ORCA-6+IC-DC (433 kt-yr / 7.74 yr); proj ORCA-Full 5 yr + IC-Up-7 10 yr |
-| 6 | Oscillograds ∂P/∂Δm², ∂P/∂δCP | _pending (CHIC code, from P. Fernández-Menéndez)_ | — | NO/IO |
+| 6 | Oscillograds ∂P/∂Δm², ∂P/∂δCP | `plot_fig6_oscillograds.py` | `probability/run_oscillograds.py` (CHIC) | NO/IO |
 | 7 | Time-evolution sensitivity vs year | `plot_fig7_time_evolution.py` | `atmospheric/run_cpt_time_evolution.py` | at δΔm²=0.05×10⁻³; IC-Up 2026, ORCA-Full 2031 |
 | S1 | NOvA CPT bias heatmap | `plot_figS1_nova_bias.py` | `globes/run_nova_dcp_scan.py` | NOvA 810 km, 25 kt, 3+3 yr; 4-rule |
 | S2 | DUNE basin-switch event spectra (6-panel) | `globes/diagnose_dune_basin_switch.py --phase 2 --paper` | (embedded GLoBES) | min1 δCP=+169°, min2 δCP=−34°, s²θ₂₃=0.630 |
@@ -133,17 +133,22 @@ at 90% CL (ORCA-6 + IceCube DeepCore), reaching ≤ 10⁻⁴ eV² within a decad
 ## Status
 
 Phases 1–2 in place: configs, Pynu submodule, env-var infrastructure, and the
-ported analysis + plotting scripts for 9 of the paper's figures. Outstanding:
-Fig 6 (CHIC oscillograds, awaited from a co-author) and the Fig 2 schematic
-(TikZ, lives in the manuscript, not the code).
+ported analysis + plotting scripts for 10 of the paper's figures. Outstanding:
+only the Fig 2 schematic (TikZ, lives in the manuscript, not the code). Fig 6
+(oscillograds) is included but its runner needs the **CHIC** code
+(`pychic_earth`, refs [36,37]), which is not publicly distributed — obtain it
+from the authors (the Fig 6 *plotter* runs from the runner's npz with no CHIC
+dependency).
 
-**Validated** end-to-end on a real workstation (Pynu + nuSQuIDS environment): the
-env-var path layer + XML `${DATA_DIR}` resolution, the Pynu fit runners (a real
-combined ORCA-Full + IceCube-Upgrade fit converges, χ²≈180 at a grid point), the
-nuSQuIDS ΔP runner, the ICUp event-difference runner, and the Fig 1/3/5/S4
-plotters (Fig S4 reproduces the quoted 90% interval [−0.44,+0.57]×10⁻³ eV²). The
-GLoBES figures (4, S1, S2) require a GLoBES build and were not exercised on that
-machine.
+**Validated** end-to-end on a real workstation (Pynu + nuSQuIDS + GLoBES): the
+env-var path layer + XML `${DATA_DIR}` resolution; the Pynu fit runners (a real
+combined ORCA-Full + IceCube-Upgrade fit converges, χ²≈180 at a grid point); the
+nuSQuIDS ΔP runner; the ICUp event-difference runner; the GLoBES chain (libglobes
+loads, the 8-rule DUNE config initializes, the DUNE Fig 4 and NOvA Fig S1 method-d
+scans run); and the Fig 1/3/5/S4 plotters (Fig S4 reproduces the quoted 90%
+interval [−0.44,+0.57]×10⁻³ eV²). Fig 6's plotter is validated against a synthetic
+npz; its CHIC runner needs `pychic_earth` (author-supplied). Fig 2 is a manuscript
+TikZ schematic with no code.
 
 ## Citation
 

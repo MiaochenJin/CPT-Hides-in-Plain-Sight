@@ -31,7 +31,9 @@ source .venv/bin/activate
 pip install --upgrade pip
 
 # core scientific stack (versions known to work together)
-pip install "numpy<2" scipy h5py pandas pyarrow matplotlib iminuit KDEpy scikit-image
+# NOTE: scikit-image must stay <0.25 — newer releases require numpy>=2, which
+# conflicts with the numpy<2 that nuflux/nuSQuIDS need.
+pip install "numpy<2" scipy h5py pandas pyarrow matplotlib iminuit KDEpy "scikit-image<0.25"
 
 # oscillation + flux engines (native wheels)
 pip install nusquids nuflux        # provides `import nuSQuIDS`, `import nuflux`

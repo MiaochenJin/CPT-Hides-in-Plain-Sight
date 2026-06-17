@@ -36,8 +36,8 @@ env.sh.example          # environment template (copy to env.sh, edit, source)
 
 ```bash
 # 1. clone with the Pynu submodule
-git clone --recurse-submodules <repo-url> cpt-neutrino-analysis
-cd cpt-neutrino-analysis
+git clone --recurse-submodules git@github.com:MiaochenJin/CPT-Hides-in-Plain-Sight.git
+cd CPT-Hides-in-Plain-Sight
 
 # 2. install dependencies (see docs/INSTALL.md for details)
 #    - Python: numpy<2, scipy, h5py, pandas/pyarrow, matplotlib, scikit-image, nuSQuIDS, nuflux
@@ -147,4 +147,6 @@ machine.
 
 ## Citation
 
-_(paper reference to be added)_
+Companion code to *When CPT Violation Hides in Plain Sight: How CP Measurements
+Are Compromised and How to Fix Them* (Jin, Barenboim, Argüelles,
+Fernández-Menéndez, Martínez-Soler). _Full reference / arXiv to be added._

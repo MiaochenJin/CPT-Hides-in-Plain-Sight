@@ -9,8 +9,8 @@ the `analysis/globes/` scripts.
 ## 1. Clone with the Pynu submodule
 
 ```bash
-git clone --recurse-submodules <repo-url> cpt-neutrino-analysis
-cd cpt-neutrino-analysis
+git clone --recurse-submodules git@github.com:MiaochenJin/CPT-Hides-in-Plain-Sight.git
+cd CPT-Hides-in-Plain-Sight
 # if you forgot --recurse-submodules:
 git submodule update --init --recursive
 ```

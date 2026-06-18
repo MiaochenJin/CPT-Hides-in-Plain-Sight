@@ -150,6 +150,22 @@ interval [−0.44,+0.57]×10⁻³ eV²). Fig 6's plotter is validated against a 
 npz; its CHIC runner needs `pychic_earth` (author-supplied). Fig 2 is a manuscript
 TikZ schematic with no code.
 
+## Code provenance & AI usage
+
+Most of the analysis code and configuration files in this release originate in
+the [`pheno-CPT` branch of Pynu](https://github.com/pabloferm/Pynu/tree/pheno-CPT),
+included here as the `external/Pynu` submodule; the GLoBES settings under
+`configs/globes/` are bundled in addition. What this repository contributes is the
+*arrangement* of those pieces — configs, runners, and plot scripts — into a
+portable, environment-variable-driven layout.
+
+Claude (Anthropic's Claude Code) was used, under close human supervision, to
+arrange and package this code for the best possible reproducibility: de-hardcoding
+cluster-specific paths, building the environment-variable resolution layer, and
+organizing the analysis runners and plotting scripts into the structure above. The
+underlying physics, analysis logic, and numerical results are human-authored — no
+scientific code or content was created ground-up by the model.
+
 ## Citation
 
 Companion code to *When CPT Violation Hides in Plain Sight: How CP Measurements
